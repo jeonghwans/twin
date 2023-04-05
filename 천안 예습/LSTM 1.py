@@ -11,7 +11,7 @@ from datetime import datetime
 import os
 
 # 천안 기온 데이터 로드 (2021년도)
-data = pd.read_csv('/content/천안 기온.csv', parse_dates=['date'], dayfirst=True, index_col=0)
+data = pd.read_csv('C:/Users/212-10/Desktop/data/gisangcheong/Cheonan temperature.csv', parse_dates=['date'], dayfirst=True, index_col=0, encoding='cp949')
 # 헤더값 확인
 data.head()
 
@@ -20,9 +20,9 @@ data.index
 
 # 천안 기온 기간별 데이터 확인
 plt.figure(figsize=(16, 9)) # 그래프 사이즈 설정
-sns.lineplot(y=data['temperature '], x=data.index)
+sns.lineplot(y=data['temperature'], x=data.index)
 plt.xlabel('time')
-plt.ylabel('temperature ')
+plt.ylabel('temperature')
 
 #분기별 데이터 분리하여 확인
 time_steps = [['20210101', '20210301'], 
@@ -35,10 +35,10 @@ fig.set_size_inches(16, 9)
 for i in range(4):
     ax = axes[i//2, i%2]
     df = data.loc[(data.index > time_steps[i][0]) & (data.index < time_steps[i][1])]
-    sns.lineplot(y=df['temperature '], x=df.index, ax=ax)
+    sns.lineplot(y=df['temperature'], x=df.index, ax=ax)
     ax.set_title(f'{time_steps[i][0]}~{time_steps[i][1]}')
     ax.set_xlabel('time')
-    ax.set_ylabel('temperature ')
+    ax.set_ylabel('temperature')
 plt.tight_layout()
 plt.show()
 
@@ -46,7 +46,7 @@ plt.show()
 from sklearn.preprocessing import MinMaxScaler
 scaler = MinMaxScaler()
 # 정규화처리 컬럼 지정
-scale_cols = ['temperature ']
+scale_cols = ['temperature']
 # 정규화처리 데이터 확인
 scaled = scaler.fit_transform(data[scale_cols])
 scaled
@@ -87,8 +87,8 @@ test_data = windowed_dataset(y_test, WINDOW_SIZE, BATCH_SIZE, False)
 
 #데이터 구성 확인
 for data in train_data.take(1):
-    print(f'데이터셋(X) 구성(batch_size, window_size, feature갯수): {data[0].shape}')
-    print(f'데이터셋(Y) 구성(batch_size, window_size, feature갯수): {data[1].shape}')
+    print(f'dataset(X) composition(batch_size, window_size, feature number): {data[0].shape}')
+    print(f'dataset(Y) composition(batch_size, window_size, feature number): {data[1].shape}')
 
     #LSTM 예측 모델 적용
 #라이브러리 tensorflow.keras.models
@@ -123,7 +123,7 @@ checkpoint = ModelCheckpoint(filename,
                              verbose=1)
 
 #학습모델 수행
-history = model.fit(train_data, validation_data=(test_data), epochs=300, callbacks=[checkpoint, earlystopping])
+history = model.fit(train_data, validation_data=(test_data), epochs=50, callbacks=[checkpoint, earlystopping])
 
 #예측 데이터 추출
 pred = model.predict(test_data)
@@ -138,3 +138,5 @@ plt.plot(np.asarray(y_test)[10:310], label='actual') # x축 설정
 plt.plot(pred[:400], label='prediction') # x축 설정
 plt.legend()
 plt.show()
+
+print ("yo")
